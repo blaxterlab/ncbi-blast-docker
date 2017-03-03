@@ -16,7 +16,7 @@ docker run \
     --volume /dir/containing/blastdb:/db \
     --volume /dir/containing/output:/out \
     blaxterlab/ncbi-blast:latest \
-    blastn -query /query/input.fasta -db /db/nr -out /out/results.txt \
+    blastn -query /query/input.fasta -db /db/nt -out /out/results.txt \
         -evalue 1e-10 -num_threads 48 -outfmt '6 std qlen slen'
 ```
 
@@ -26,7 +26,7 @@ A shorter version of the command using option shorthands, and assuming that the 
 
 ```
 docker run -u $UID:$GROUPS --name blast-test blaxterlab/ncbi-blast:latest -v `pwd`:/query -v `pwd`:/db -v `pwd`:/out \
-    blastn -query /query/input.fasta -db /db/nr -out /out/results.txt -evalue 1e-10 -num_threads 48 -outfmt '6 std qlen slen' 
+    blastn -query /query/input.fasta -db /db/nt -out /out/results.txt -evalue 1e-10 -num_threads 48 -outfmt '6 std qlen slen' 
 ```
 
 The possible drawbacks of this approach are:
