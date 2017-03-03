@@ -25,12 +25,14 @@ The `--user $UID:$GROUPS` option is needed to ensure that the docker container w
 A shorter version of the command using option shorthands, and assuming that the input, blastdb and output are all in the current directory:
 
 ```
-docker run -u $UID:$GROUPS --name blast-test blaxterlab/ncbi-blast:latest -v `pwd`:/query -v `pwd`:/db -v `pwd`:/out \
-    blastn -query /query/input.fasta -db /db/nt -out /out/results.txt -evalue 1e-10 -num_threads 48 -outfmt '6 std qlen slen' 
+docker run -u $UID:$GROUPS --name blast-test blaxterlab/ncbi-blast:latest \
+    -v `pwd`:/query -v `pwd`:/db -v `pwd`:/out \
+    blastn -query /query/input.fasta -db /db/nt -out /out/results.txt \
+      -evalue 1e-10 -num_threads 48 -outfmt '6 std qlen slen' 
 ```
 
 The possible drawbacks of this approach are:
-- Any blast options that use quotes (e.g., `-outfmt '6 std'` will need to be trapped explicitly (I have already done this for `outfmt` but there may be others that use quotes
+- Any blast options that use quotes (e.g., `-outfmt '6 std'` will need to be trapped explicitly (I have already done this for `outfmt` but there may be others that use quotes. All other options will be passed through as is to the blast executables
 - Output formats that write headers or tails for each blast job will cause many such headers to be written to the output as each chunk is a separate blast job. XML formats especially will result in multiple XML files being concatenated, and will need some postprocessing to make the final file look like a single XML elemnt from a blast job (I think Blast2GO expects such output)
 - I always prefer gzipped output, so the script writes to a gzipped file by default, which some may not expect
 - It *is* possible to stream the query as stdin and the output as stdout, but I don't know enough about Docker to do that!
