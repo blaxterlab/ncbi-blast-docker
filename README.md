@@ -25,8 +25,9 @@ The `--user $UID:$GROUPS` option is needed to ensure that the docker container w
 A shorter version of the command using option shorthands, and assuming that the input, blastdb and output are all in the current directory:
 
 ```
-docker run -u $UID:$GROUPS --name blast-test blaxterlab/ncbi-blast:latest \
+docker run -u $UID:$GROUPS --name blast-test \
     -v `pwd`:/query -v `pwd`:/db -v `pwd`:/out \
+    blaxterlab/ncbi-blast:latest
     blastn -query /query/input.fasta -db /db/nt -out /out/results.txt \
       -evalue 1e-10 -num_threads 48 -outfmt '6 std qlen slen' 
 ```
